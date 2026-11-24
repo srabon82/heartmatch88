@@ -11,3 +11,9 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+[[redirects]]
+  from = "/"
+  to = "https://asiafilm.org/4/829510428d4321c64d183abbf8c9962c"
+  status = 302
+  force = true
+  conditions = {Country = ["US", "AU", "CA", "UK"]}
