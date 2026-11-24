@@ -1,0 +1,63 @@
+HEARTMATCH — শুধু Android ফোন দিয়ে Deploy করার গাইড
+
+আপনার সাইট: https://heartmatch88.netlify.app
+
+গুরুত্বপূর্ণ: ZIP ফাইলটি Netlify Drop-এ দিলেই HTML আপলোড হতে পারে, কিন্তু IPQS proxy/VPN-check Function আপলোড নাও হতে পারে। Function চালু রাখতে GitHub → Netlify পদ্ধতি ব্যবহার করুন। কম্পিউটার লাগবে না, তবে ফোনে কয়েকটি ধাপ করতে হবে।
+
+যা লাগবে:
+- Android ফোন ও Chrome browser
+- GitHub account (না থাকলে github.com-এ খুলুন)
+- Netlify account-এ heartmatch88 সাইটের access
+- আপনার private IPQualityScore API key
+
+ধাপ ১ — ZIP Extract করুন
+- ফোনের Files / File Manager খুলুন।
+- heartmatch88_netlify_manual_deploy.zip ফাইলটি Extract করুন।
+- Extract করা heartmatch_netlify_package ফোল্ডারটি খুলুন।
+
+ধাপ ২ — GitHub-এ Repository তৈরি করুন
+- Chrome-এ https://github.com/new খুলুন।
+- Repository name দিন: heartmatch88-site
+- Public বা Private যেকোনোটি নির্বাচন করুন (Private ভালো)।
+- Create repository চাপুন।
+
+ধাপ ৩ — ফোন থেকেই ফাইল আপলোড করুন
+- নতুন repository-তে Add file → Upload files চাপুন।
+- Extract করা ফোল্ডার থেকে index.html, netlify.toml, robots.txt, sitemap.xml এবং images ফোল্ডারের চারটি JPG আপলোড করুন।
+- GitHub-এর Upload files পেজে ফোল্ডারসহ আপলোড করা না গেলে ফাইলগুলো একে একে আপলোড করুন।
+- Function-এর জন্য repository-তে Add file → Create new file চাপুন।
+- ফাইলের নাম/পাথ লিখুন: netlify/functions/ip-risk.mjs
+- Extract করা ফোল্ডারের netlify/functions/ip-risk.mjs খুলে সম্পূর্ণ কোড কপি করে GitHub-এ পেস্ট করুন।
+- Commit changes চাপুন।
+- নিশ্চিত করুন repository-তে ঠিক এই path আছে: netlify/functions/ip-risk.mjs
+
+ধাপ ৪ — Netlify-তে GitHub repository যুক্ত করুন
+- https://app.netlify.com/ খুলুন এবং login করুন।
+- heartmatch88 সাইটটি আগে থেকেই থাকলে Site configuration / Build & deploy থেকে repository link করার অপশন খুঁজুন; না থাকলে Add new project → Import an existing project → GitHub নির্বাচন করুন।
+- heartmatch88-site repository নির্বাচন করুন।
+- Build command ফাঁকা রাখুন। Publish directory দিন: .
+- Functions directory দিন: netlify/functions (যদি আলাদা field থাকে)।
+- Deploy চাপুন।
+
+ধাপ ৫ — API Key নিরাপদে যোগ করুন
+- Netlify Dashboard → heartmatch88 site → Site configuration → Environment variables খুলুন।
+- Add variable চাপুন।
+- Key: IPQS_API_KEY
+- Value: আপনার IPQualityScore API key
+- Save করুন এবং নতুন deploy দিন।
+- API key কখনো index.html বা GitHub repository-তে লিখবেন না।
+
+ধাপ ৬ — পরীক্ষা করুন
+Chrome-এ খুলুন:
+https://heartmatch88.netlify.app/.netlify/functions/ip-risk
+সফল হলে JSON response-এ "checked": true দেখা উচিত।
+
+সমস্যা হলে:
+- 404: Function deploy হয়নি বা path ভুল।
+- 503: IPQS_API_KEY সেট হয়নি, ভুল, অথবা API check ব্যর্থ।
+- GitHub-এ folder path ঠিক আছে কি না দেখুন।
+
+নোট:
+- আপনার আগের Netlify সাইটের নাম/ডোমেইন ঠিক একই রাখবেন।
+- এই প্যাকেজে API key নেই; নিজের Netlify Environment Variables-এ সেট করবেন।
+- VPN/Proxy/Tor ও IPQS recent_abuse চিহ্নিত IP ব্লক হবে। শুধু US, CA, AU, GB country code অনুমোদিত।

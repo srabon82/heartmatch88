@@ -1,0 +1,49 @@
+HEARTMATCH — NETLIFY MANUAL DEPLOY PACKAGE
+
+YOUR SITE
+https://heartmatch88.netlify.app
+
+IMPORTANT: This package contains a Netlify Function. A plain static drag-and-drop upload may publish the HTML but omit serverless functions. To deploy BOTH the site and function while keeping a manual deployment workflow, use Netlify CLI:
+
+1) Extract this ZIP on your computer.
+2) Install Node.js, then open a terminal in the extracted heartmatch_netlify_package folder.
+3) Install Netlify CLI:
+   npm install -g netlify-cli
+4) Log in:
+   netlify login
+5) Link this folder to your EXISTING Netlify site:
+   netlify link
+   Choose heartmatch88 when prompted.
+6) Add your private IPQualityScore key to the existing site's environment:
+   netlify env:set IPQS_API_KEY YOUR_PRIVATE_IPQS_KEY
+   (Do not put the key in index.html, Git, or any public file.)
+7) Deploy to production:
+   netlify deploy --prod
+
+NETLIFY DASHBOARD ALTERNATIVE FOR ENVIRONMENT VARIABLE
+Site configuration > Environment variables > Add variable
+Key: IPQS_API_KEY
+Value: your private IPQualityScore API key
+Then redeploy the site so the function receives the variable.
+
+TEST AFTER DEPLOY
+Open:
+https://heartmatch88.netlify.app/.netlify/functions/ip-risk
+
+Expected response for a normal visitor is JSON containing:
+"checked": true
+"blocked": false/true
+"allowed_country": true/false
+
+If you see 503, check the function logs and confirm IPQS_API_KEY is set correctly.
+Do not share your API key with anyone.
+
+PROXY RULES
+- Proxy, VPN, Tor and IPQS recent_abuse flags are blocked.
+- Only US, Canada, Australia and UK IP country codes pass the country check.
+- If the provider fails or is not configured, the page fails closed and does not reveal the external join link.
+- IP risk services can misclassify shared networks or legitimate privacy tools. Provide a contact/appeal route if you use strict blocking.
+- Visitor IP information is sent to IPQualityScore. Disclose this in your privacy notice and follow applicable privacy laws and IPQS terms.
+
+NOTE
+Netlify Functions require a deploy method that packages functions (Netlify CLI, Git-based build, or supported API workflow). The function source must remain in netlify/functions, not inside the published images folder.
